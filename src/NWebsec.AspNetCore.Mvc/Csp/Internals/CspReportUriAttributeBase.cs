@@ -78,7 +78,7 @@ namespace NWebsec.AspNetCore.Mvc.Csp.Internals
 
         //TODO It might make sense to allow reporting to be enabled without reportUri's, they might be defined in middleware
         //TODO Add unit tests for this?
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(FilterContext filterContext)
         {
             if (_directive.Enabled && _directive.ReportUris == null)
             {
@@ -89,7 +89,7 @@ namespace NWebsec.AspNetCore.Mvc.Csp.Internals
             base.OnActionExecuting(filterContext);
         }
 
-        public sealed override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+        public sealed override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
         {
             _headerOverrideHelper.SetCspHeaders(new HttpContextWrapper(filterContext.HttpContext), ReportOnly);
         }

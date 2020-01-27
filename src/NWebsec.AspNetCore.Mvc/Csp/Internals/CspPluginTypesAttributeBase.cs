@@ -72,7 +72,7 @@ namespace NWebsec.AspNetCore.Mvc.Csp.Internals
 
         protected abstract bool ReportOnly { get; }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(FilterContext filterContext)
         {
             ValidateParams();
 
@@ -80,7 +80,7 @@ namespace NWebsec.AspNetCore.Mvc.Csp.Internals
             base.OnActionExecuting(filterContext);
         }
 
-        public sealed override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+        public sealed override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
         {
             _headerOverrideHelper.SetCspHeaders(new HttpContextWrapper(filterContext.HttpContext), ReportOnly);
         }

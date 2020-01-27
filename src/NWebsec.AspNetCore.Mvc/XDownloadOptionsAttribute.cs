@@ -35,13 +35,13 @@ namespace NWebsec.AspNetCore.Mvc
         /// </summary>
         public bool Enabled { get => _config.Enabled; set => _config.Enabled = value; }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(FilterContext filterContext)
         {
             _headerConfigurationOverrideHelper.SetXDownloadOptionsOverride(new HttpContextWrapper(filterContext.HttpContext), _config);
             base.OnActionExecuting(filterContext);
         }
 
-        public override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+        public override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
         {
             _headerOverrideHelper.SetXDownloadOptionsHeader(new HttpContextWrapper(filterContext.HttpContext));
         }

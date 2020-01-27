@@ -65,13 +65,13 @@ namespace NWebsec.AspNetCore.Mvc
         /// </summary>
         public bool BlockMode { get => _config.BlockMode; set => _config.BlockMode = value; }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(FilterContext filterContext)
         {
             _headerConfigurationOverrideHelper.SetXXssProtectionOverride(new HttpContextWrapper(filterContext.HttpContext), _config);
             base.OnActionExecuting(filterContext);
         }
 
-        public override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+        public override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
         {
             _headerOverrideHelper.SetXXssProtectionHeader(new HttpContextWrapper(filterContext.HttpContext));
         }

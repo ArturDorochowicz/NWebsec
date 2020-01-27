@@ -59,13 +59,13 @@ namespace NWebsec.AspNetCore.Mvc
             }
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(FilterContext filterContext)
         {
             _configurationOverrideHelper.SetXFrameoptionsOverride(new HttpContextWrapper(filterContext.HttpContext), _config);
             base.OnActionExecuting(filterContext);
         }
 
-        public override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+        public override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
         {
             _headerOverrideHelper.SetXFrameoptionsHeader(new HttpContextWrapper(filterContext.HttpContext));
         }

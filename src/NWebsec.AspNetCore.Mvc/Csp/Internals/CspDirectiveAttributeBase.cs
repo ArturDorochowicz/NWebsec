@@ -102,7 +102,7 @@ namespace NWebsec.AspNetCore.Mvc.Csp.Internals
         protected abstract bool ReportOnly { get; }
         protected internal virtual bool EnableHashSources { get; } = false;
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(FilterContext filterContext)
         {
             ValidateParams();
 
@@ -152,7 +152,7 @@ namespace NWebsec.AspNetCore.Mvc.Csp.Internals
                     DirectiveConfig.OtherSources != null);
         }
 
-        public sealed override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+        public sealed override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
         {
             _headerOverrideHelper.SetCspHeaders(new HttpContextWrapper(filterContext.HttpContext), ReportOnly);
         }

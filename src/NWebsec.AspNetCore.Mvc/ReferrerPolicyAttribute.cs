@@ -31,13 +31,13 @@ namespace NWebsec.AspNetCore.Mvc
             _headerOverrideHelper = new HeaderOverrideHelper(new CspReportHelper());
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(FilterContext filterContext)
         {
             _configurationOverrideHelper.SetReferrerPolicyOverride(new HttpContextWrapper(filterContext.HttpContext), _config);
             base.OnActionExecuting(filterContext);
         }
 
-        public override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+        public override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
         {
             _headerOverrideHelper.SetReferrerPolicyHeader(new HttpContextWrapper(filterContext.HttpContext));
         }

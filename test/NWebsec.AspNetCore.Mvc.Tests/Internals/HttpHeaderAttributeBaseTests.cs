@@ -35,7 +35,7 @@ namespace NWebsec.AspNetCore.Mvc.Tests.Internals
         public void OnActionExecuted_CallsSetHttpHeadersOnActionExecuted()
         {
 
-            _httpHeaderAttributeBaseMock.Object.OnActionExecuted(_actionExecutedContext);
+            ((IActionFilter)_httpHeaderAttributeBaseMock.Object).OnActionExecuted(_actionExecutedContext);
 
             _httpHeaderAttributeBaseMock.Verify(m => m.SetHttpHeadersOnActionExecuted(_actionExecutedContext), Times.Once);
         }
@@ -44,8 +44,8 @@ namespace NWebsec.AspNetCore.Mvc.Tests.Internals
         public void OnActionExecuted_CallsSetHttpHeadersOnceOnMultipleOnActionExecuted()
         {
 
-            _httpHeaderAttributeBaseMock.Object.OnActionExecuted(_actionExecutedContext);
-            _httpHeaderAttributeBaseMock.Object.OnActionExecuted(_actionExecutedContext);
+            ((IActionFilter)_httpHeaderAttributeBaseMock.Object).OnActionExecuted(_actionExecutedContext);
+            ((IActionFilter)_httpHeaderAttributeBaseMock.Object).OnActionExecuted(_actionExecutedContext);
 
             _httpHeaderAttributeBaseMock.Verify(m => m.SetHttpHeadersOnActionExecuted(_actionExecutedContext), Times.Once);
         }
@@ -60,7 +60,7 @@ namespace NWebsec.AspNetCore.Mvc.Tests.Internals
 
         protected class TestHeaderAttribute : HttpHeaderAttributeBase
         {
-            public override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+            public override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
             {
                 throw new System.NotImplementedException();
             }

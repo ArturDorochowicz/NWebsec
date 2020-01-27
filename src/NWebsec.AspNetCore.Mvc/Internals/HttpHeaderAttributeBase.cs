@@ -5,30 +5,56 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace NWebsec.AspNetCore.Mvc.Internals
 {
-    public abstract class HttpHeaderAttributeBase : ActionFilterAttribute
+    public abstract class HttpHeaderAttributeBase : Attribute, IOrderedFilter, IActionFilter, IPageFilter
     {
         private static readonly Object MarkerObject = new Object();
         private string _contextKey;
+
+        public int Order { get; set; }
 
         private string ContextKey => _contextKey ?? (_contextKey = "NWebsecHeaderSet" + ContextKeyIdentifier);
 
         internal virtual string ContextKeyIdentifier => GetType().Name;
 
-        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        void IActionFilter.OnActionExecuting(ActionExecutingContext context)
         {
-            var context = filterContext.HttpContext;
-            if (context.Items.ContainsKey(ContextKey))
-            {
-                base.OnActionExecuted(filterContext);
-                return;
-            }
-
-            context.Items[ContextKey] = MarkerObject;
-            SetHttpHeadersOnActionExecuted(filterContext);
-            base.OnActionExecuted(filterContext);
+            OnActionExecuting(context);
         }
 
-        public abstract void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext);
+        void IActionFilter.OnActionExecuted(ActionExecutedContext context)
+        {
+            var httpContext = context.HttpContext;
+            if (!httpContext.Items.ContainsKey(ContextKey))
+            {
+                httpContext.Items[ContextKey] = MarkerObject;
+                SetHttpHeadersOnActionExecuted(context);
+            }
+        }
+
+        void IPageFilter.OnPageHandlerSelected(PageHandlerSelectedContext context)
+        {
+        }
+
+        void IPageFilter.OnPageHandlerExecuting(PageHandlerExecutingContext context)
+        {
+            OnActionExecuting(context);
+        }
+
+        void IPageFilter.OnPageHandlerExecuted(PageHandlerExecutedContext context)
+        {
+            var httpContext = context.HttpContext;
+            if (!httpContext.Items.ContainsKey(ContextKey))
+            {
+                context.HttpContext.Items[ContextKey] = MarkerObject;
+                SetHttpHeadersOnActionExecuted(context);
+            }
+        }
+
+        public virtual void OnActionExecuting(FilterContext filterContext)
+        {
+        }
+
+        public abstract void SetHttpHeadersOnActionExecuted(FilterContext filterContext);
 
         /// <summary>
         /// Creates an exception with message prefixed with the current type name, to give a hint about the current attribute.

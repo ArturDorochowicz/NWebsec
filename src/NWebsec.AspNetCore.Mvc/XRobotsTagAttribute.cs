@@ -71,13 +71,13 @@ namespace NWebsec.AspNetCore.Mvc
         /// </summary>
         public bool NoImageIndex { get => _config.NoImageIndex; set => _config.NoImageIndex = value; }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(FilterContext filterContext)
         {
             _headerConfigurationOverrideHelper.SetXRobotsTagHeaderOverride(new HttpContextWrapper(filterContext.HttpContext), _config);
             base.OnActionExecuting(filterContext);
         }
 
-        public override void SetHttpHeadersOnActionExecuted(ActionExecutedContext filterContext)
+        public override void SetHttpHeadersOnActionExecuted(FilterContext filterContext)
         {
             _headerOverrideHelper.SetXRobotsTagHeader(new HttpContextWrapper(filterContext.HttpContext));
         }
